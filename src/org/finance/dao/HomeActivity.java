@@ -1,26 +1,24 @@
 package org.finance.dao;
 
-import java.sql.*;
-import org.finance.model.User;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-public class Activity implements DatabaseCredentials {
+import org.finance.model.Group;
 
+public class HomeActivity implements DatabaseCredentials{
+	
 	Connection conn = null;
 	Statement stmt = null;
 
-	public int createUser(User user) {
-		int newId = 0;
-
+	public void addFriend(int userId, int friendId) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
-			String sql = "insert into user (name, passcode) values ('" + user.getName() + "', '" + user.getPasscode() + "')";
+			String sql = "insert into friends (user, friend) values (" + userId + ", " + friendId + ")";
 			stmt.executeUpdate(sql);
-			ResultSet rs = stmt.executeQuery("select last_insert_id() as last_id");
-			if (rs.next())
-				newId = Integer.parseInt(rs.getString(1));
-			rs.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 		} catch (Exception e) {
@@ -33,21 +31,15 @@ public class Activity implements DatabaseCredentials {
 				e.printStackTrace();
 			}
 		}
-		return newId;
 	}
 	
-	public String getUserName(User user) {
-		String userName = null;
-
+	public void addGroup(Group group) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
-
-			String sql = "select name from user where id = " + user.getId() + " and passcode = '" + user.getPasscode() + "'";
-			ResultSet rs = stmt.executeQuery(sql);
-			if (rs.next()) userName = rs.getString(1);
-			rs.close();
+			String sql = "insert into user_group (name, user) values ('" + group.getGroupName() + "', " + group.getGroupId() + ")";
+			stmt.executeUpdate(sql);
 		} catch (SQLException se) {
 			se.printStackTrace();
 		} catch (Exception e) {
@@ -60,6 +52,5 @@ public class Activity implements DatabaseCredentials {
 				e.printStackTrace();
 			}
 		}
-		return userName;
 	}
 }
