@@ -2,7 +2,6 @@ package org.finance.controller;
 
 import java.util.Scanner;
 
-import org.finance.service.LoginUser;
 import org.finance.service.Register;
 
 public class Home {
@@ -28,6 +27,7 @@ public class Home {
 				break;
 			case 2:
 				// Register user
+				System.out.println();
 				System.out.println("User created with id: " + new Register().registerUser());
 				break;
 			case 9:

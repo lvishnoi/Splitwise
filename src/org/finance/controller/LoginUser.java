@@ -1,9 +1,14 @@
-package org.finance.service;
+package org.finance.controller;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.finance.dao.Activity;
+import org.finance.dao.HomeActivity;
+import org.finance.model.Group;
 import org.finance.model.User;
+import org.finance.service.AddFriend;
+import org.finance.service.CreateGroup;
 
 public class LoginUser {
 
@@ -27,26 +32,28 @@ public class LoginUser {
 
 		if (name != null && name.length() > 0) {
 			System.out.println("Welcome: " + name.toUpperCase());
-			// redirect to another activity
 			displayHomePage(usr.getId());
 		} else
 			System.out.println("User does not exist.");
 	}
 
 	public void welcomeHome() {
-		System.out.println("---- ---- ---- ---- ----");
+		System.out.println("---- ---- ---- ---- ---- -----");
 		System.out.println("Press 1: Add new friend");
 		System.out.println("Press 2: Create new group");
 		System.out.println("Press 3: Add a bill");
 		System.out.println("Press 4: Generate report");
-		
+
 		System.out.println("Press 9: Log-off");
 		System.out.println();
 		System.out.print("Please choose an option: ");
 	}
-	
+
 	public void displayHomePage(int currId) {
 		int option = 0;
+		int tmp = 0;
+		ArrayList<Integer> friends = new ArrayList<Integer>();
+
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 
@@ -65,9 +72,27 @@ public class LoginUser {
 				break;
 			case 2:
 				// create new group
-				new CreateGroup().createNewGroup(currId);
-				// add friends in created group
-				
+				Group group = new CreateGroup().createNewGroup(currId);
+				// add friends in created group -- infinite loop and only friends not strangers
+				while (tmp != 1) {
+					System.out.print("Press 1 if you do NOT want to add more friends: ");
+					tmp = Integer.parseInt(scanner.nextLine());
+					if (tmp == 1)
+						break;
+					friends.clear();
+					friends = new HomeActivity().availableFriends(group, currId);
+					System.out.println();
+					if (!friends.isEmpty()) {
+						System.out.print("Available Friends: ");
+						for (int i : friends)
+							System.out.print(i + ", ");
+						System.out.println();
+						new CreateGroup().addFriendToGroup(group, currId);
+					} else {
+						System.out.println("No friend left to add in the group: " + group.getGroupName());
+						break;
+					}
+				}
 				break;
 			case 3:
 				break;

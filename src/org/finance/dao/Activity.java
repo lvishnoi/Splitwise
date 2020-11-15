@@ -12,6 +12,7 @@ public class Activity implements DatabaseCredentials {
 		int newId = 0;
 
 		try {
+			System.out.println();
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
