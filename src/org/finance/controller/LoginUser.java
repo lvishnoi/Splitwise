@@ -1,6 +1,6 @@
 package org.finance.controller;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
 
 import org.finance.dao.Activity;
@@ -52,7 +52,8 @@ public class LoginUser {
 	public void displayHomePage(int currId) {
 		int option = 0;
 		int tmp = 0;
-		ArrayList<Integer> friends = new ArrayList<Integer>();
+		int addedFriendId;
+		HashSet<Integer> friends = new HashSet<Integer>();
 
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
@@ -73,21 +74,21 @@ public class LoginUser {
 			case 2:
 				// create new group
 				Group group = new CreateGroup().createNewGroup(currId);
-				// add friends in created group -- infinite loop and only friends not strangers
+				// add friends in created group -- infinite loop and only friends not all users
+				friends = new HomeActivity().availableFriends(group, currId);
 				while (tmp != 1) {
 					System.out.print("Press 1 if you do NOT want to add more friends: ");
 					tmp = Integer.parseInt(scanner.nextLine());
 					if (tmp == 1)
 						break;
-					friends.clear();
-					friends = new HomeActivity().availableFriends(group, currId);
 					System.out.println();
 					if (!friends.isEmpty()) {
 						System.out.print("Available Friends: ");
 						for (int i : friends)
 							System.out.print(i + ", ");
 						System.out.println();
-						new CreateGroup().addFriendToGroup(group, currId);
+						addedFriendId = new CreateGroup().addFriendToGroup(group, currId);
+						friends.remove(addedFriendId);
 					} else {
 						System.out.println("No friend left to add in the group: " + group.getGroupName());
 						break;

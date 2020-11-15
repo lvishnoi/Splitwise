@@ -27,7 +27,7 @@ public class CreateGroup {
 		return grp;
 	}
 
-	public void addFriendToGroup(Group group, int usrId) {
+	public int addFriendToGroup(Group group, int usrId) {
 		int id = 0;
 
 		@SuppressWarnings("resource")
@@ -43,6 +43,7 @@ public class CreateGroup {
 			new HomeActivity().addFrindToGroup(group, id);
 			System.out.println("Friend added successfully to group: " + group.getGroupName());
 		}
+		return id;
 	}
 	
 	public boolean displayAvailableFriends() {

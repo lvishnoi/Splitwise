@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.finance.model.Group;
 
@@ -90,8 +90,8 @@ public class HomeActivity implements DatabaseCredentials {
 		}
 	}
 
-	public ArrayList<Integer> availableFriends(Group grp, int currId) {
-		ArrayList<Integer> list = new ArrayList<Integer>();
+	public HashSet<Integer> availableFriends(Group grp, int currId) {
+		HashSet<Integer> list = new HashSet<Integer>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
