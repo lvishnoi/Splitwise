@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 
 public class BillActivity implements DatabaseCredentials {
 
@@ -60,6 +61,38 @@ public class BillActivity implements DatabaseCredentials {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public HashMap<Integer, Integer> getFullStatement(int user) {
+		HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			stmt = conn.createStatement();
+
+			String sql = "select friend, amount from finance where user = " + user;
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				if (!hm.containsKey(rs.getInt("friend")))
+					hm.put(rs.getInt("friend"), rs.getInt("amount"));
+				else
+					hm.put(rs.getInt("friend"), hm.get(rs.getInt("friend")) + rs.getInt("amount"));
+			}
+			rs.close();
+		} catch (SQLException se) {
+			se.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return hm;
 	}
 
 }

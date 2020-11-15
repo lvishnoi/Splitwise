@@ -16,7 +16,8 @@ public class Activity implements DatabaseCredentials {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
-			String sql = "insert into user (name, passcode) values ('" + user.getName() + "', '" + user.getPasscode() + "')";
+			String sql = "insert into user (name, passcode) values ('" + user.getName() + "', '" + user.getPasscode()
+					+ "')";
 			stmt.executeUpdate(sql);
 			ResultSet rs = stmt.executeQuery("select last_insert_id() as last_id");
 			if (rs.next())
@@ -38,7 +39,7 @@ public class Activity implements DatabaseCredentials {
 		}
 		return newId;
 	}
-	
+
 	public String getUserName(User user) {
 		String userName = null;
 
@@ -47,9 +48,39 @@ public class Activity implements DatabaseCredentials {
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
 
-			String sql = "select name from user where id = " + user.getId() + " and passcode = '" + user.getPasscode() + "'";
+			String sql = "select name from user where id = " + user.getId() + " and passcode = '" + user.getPasscode()
+					+ "'";
 			ResultSet rs = stmt.executeQuery(sql);
-			if (rs.next()) userName = rs.getString(1);
+			if (rs.next())
+				userName = rs.getString(1);
+			rs.close();
+		} catch (SQLException se) {
+			se.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return userName;
+	}
+
+	public String getUser(int id) {
+		String userName = null;
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			stmt = conn.createStatement();
+
+			String sql = "select name from user where id = " + id;
+			ResultSet rs = stmt.executeQuery(sql);
+			if (rs.next())
+				userName = rs.getString(1);
 			rs.close();
 		} catch (SQLException se) {
 			se.printStackTrace();

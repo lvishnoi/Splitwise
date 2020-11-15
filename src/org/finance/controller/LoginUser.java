@@ -7,6 +7,7 @@ import org.finance.dao.Activity;
 import org.finance.dao.HomeActivity;
 import org.finance.model.Group;
 import org.finance.model.User;
+import org.finance.service.AccountSummary;
 import org.finance.service.AddFriend;
 import org.finance.service.BillWithFriends;
 import org.finance.service.CreateGroup;
@@ -110,6 +111,8 @@ public class LoginUser {
 				}
 				break;
 			case 4:
+				// generate report
+				new AccountSummary().displayStatement(currId);
 				break;
 			case 9:
 				System.out.println("User logged off.");
