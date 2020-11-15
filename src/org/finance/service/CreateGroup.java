@@ -28,32 +28,22 @@ public class CreateGroup {
 	}
 
 	public int addFriendToGroup(Group group, int usrId) {
-		int id = 0;
+		int friendId = 0;
 
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 
 		System.out.print("Enter the friend's id: ");
-		id = Integer.parseInt(scanner.nextLine());
+		friendId = Integer.parseInt(scanner.nextLine());
 
 		System.out.println();
-		if (usrId == id)
+		if (usrId == friendId)
 			System.out.println("Can't add urself as friend.");
 		else {
-			new HomeActivity().addFrindToGroup(group, id);
+			new HomeActivity().addFrindToGroup(group, usrId, friendId);
 			System.out.println("Friend added successfully to group: " + group.getGroupName());
 		}
-		return id;
-	}
-	
-	public boolean displayAvailableFriends() {
-		
-		System.out.println();
-		System.out.println("Available friends:");
-		
-		
-		
-		return true;
+		return friendId;
 	}
 
 }

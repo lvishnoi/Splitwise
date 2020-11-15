@@ -21,6 +21,9 @@ public class HomeActivity implements DatabaseCredentials {
 			stmt = conn.createStatement();
 			String sql = "insert into friends (user, friend) values (" + userId + ", " + friendId + ")";
 			stmt.executeUpdate(sql);
+			sql = "insert into finance (user, friend, group_id, amount) values (" + userId + ", " + friendId
+					+ ", 0, 0)";
+			stmt.executeUpdate(sql);
 		} catch (SQLException se) {
 			se.printStackTrace();
 		} catch (Exception e) {
@@ -52,6 +55,10 @@ public class HomeActivity implements DatabaseCredentials {
 
 			sql = "insert into group_friend (group_id, friend) values ('" + group.getGroupId() + "', " + userId + ")";
 			stmt.executeUpdate(sql);
+			
+			sql = "insert into finance (user, friend, group_id, amount) values (" + userId + ", " + userId + ", "
+					+ group.getGroupId() + ", " + "0)";
+			stmt.executeUpdate(sql);
 
 		} catch (SQLException se) {
 			se.printStackTrace();
@@ -67,13 +74,16 @@ public class HomeActivity implements DatabaseCredentials {
 		}
 	}
 
-	public void addFrindToGroup(Group group, int usrId) {
+	public void addFrindToGroup(Group group, int usrId, int friend) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
-			String sql = "insert into group_friend (group_id, friend) values ('" + group.getGroupId() + "', " + usrId
+			String sql = "insert into group_friend (group_id, friend) values ('" + group.getGroupId() + "', " + friend
 					+ ")";
+			stmt.executeUpdate(sql);
+			sql = "insert into finance (user, friend, group_id, amount) values (" + usrId + ", " + friend + ", "
+					+ group.getGroupId() + ", " + "0)";
 			stmt.executeUpdate(sql);
 
 		} catch (SQLException se) {
@@ -104,7 +114,36 @@ public class HomeActivity implements DatabaseCredentials {
 				while (rs.next())
 					list.add(rs.getInt("friend"));
 			}
-
+			rs.close();
+		} catch (SQLException se) {
+			se.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	public HashSet<Integer> getAllFriends(int currId) {
+		HashSet<Integer> list = new HashSet<Integer>();
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			stmt = conn.createStatement();
+			String sql = "select friend from friends where user = " + currId;
+			ResultSet rs = stmt.executeQuery(sql);
+			if (rs.next()) {
+				rs.beforeFirst();
+				while (rs.next())
+					list.add(rs.getInt("friend"));
+			}
+			rs.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 		} catch (Exception e) {

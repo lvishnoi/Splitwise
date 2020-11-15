@@ -22,6 +22,8 @@ public class Activity implements DatabaseCredentials {
 			if (rs.next())
 				newId = Integer.parseInt(rs.getString(1));
 			rs.close();
+			sql = "insert into finance (user, friend, group_id, amount) values (" + newId + ", " + newId + ", 0, 0)";
+			stmt.executeUpdate(sql);
 		} catch (SQLException se) {
 			se.printStackTrace();
 		} catch (Exception e) {

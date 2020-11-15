@@ -8,6 +8,7 @@ import org.finance.dao.HomeActivity;
 import org.finance.model.Group;
 import org.finance.model.User;
 import org.finance.service.AddFriend;
+import org.finance.service.BillWithFriends;
 import org.finance.service.CreateGroup;
 
 public class LoginUser {
@@ -96,6 +97,17 @@ public class LoginUser {
 				}
 				break;
 			case 3:
+				// add a bill to friends/group
+				System.out.println("Press 1 for friends, 2 for a group");
+				System.out.print("Pick an option:  ");
+				tmp = Integer.parseInt(scanner.nextLine());
+				switch (tmp) {
+				case 1:
+					new BillWithFriends().shareBillWithFriends(currId);
+					break;
+				case 2:
+					break;
+				}
 				break;
 			case 4:
 				break;
