@@ -30,7 +30,7 @@ public class BillWithFriends {
 			String[] list = inputFriends.split(" ");
 			int amount = Integer.parseInt(sc.nextLine());
 			if (list.length > 1)
-				new BillActivity().updateBillInDatabase(list, amount, userId);
+				new BillActivity().updateBillInDatabase(list, amount, userId, 0);
 		}
 	}
 }

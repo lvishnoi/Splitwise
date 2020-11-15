@@ -10,6 +10,7 @@ import org.finance.model.User;
 import org.finance.service.AccountSummary;
 import org.finance.service.AddFriend;
 import org.finance.service.BillWithFriends;
+import org.finance.service.BillWithGroup;
 import org.finance.service.CreateGroup;
 
 public class LoginUser {
@@ -107,6 +108,7 @@ public class LoginUser {
 					new BillWithFriends().shareBillWithFriends(currId);
 					break;
 				case 2:
+					new BillWithGroup().shareBillWithFriends(currId);
 					break;
 				}
 				break;
